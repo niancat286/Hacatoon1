@@ -29,59 +29,73 @@ class CisterianNumber:
             raise ValueError("Number must be between 0 and 9999")
         self._number = number
         self._digits = [0] * (4 - len(str(number))) + [int(d) for d in str(number)]
-    def draw_element(self, element):
 
+    def draw_element(self, element, i):
         down()
         goto(0, scale_y)
+        if i == 3:
+            x = scale_x
+            y1 = scale_y
+            y2 = 2*scale_y/3
+        if i == 2:
+            x = - scale_x
+            y1 = scale_y
+            y2 = 2 * scale_y / 3
+        if i == 1:
+            x = scale_x
+            y1 = 0
+            y2 = 1 * scale_y / 3
+        if i == 0:
+            x = - scale_x
+            y1 = 0
+            y2 = 1 * scale_y / 3
 
 
         if element == hor_up:
-            goto(0, scale_y)
-            goto(scale_x, scale_y)
+            goto(0, y1)
+            goto(x, y1)
             up()
-
 
         elif element == hor_down:
-            goto(0, 2*scale_y/3)
-            goto(scale_x, 2*scale_y/3)
+            goto(0, y2)
+            goto(x, y2)
             up()
-
 
         elif element == descent:
-            goto(0, scale_y)
-            goto(scale_x, 2*scale_y/3)
+            goto(0, y1)
+            goto(x, y2)
             up()
 
-
         elif element == ascend:
-            goto(0, 2*scale_y/3)
-            goto(scale_x, scale_y)
+            goto(0, y2)
+            goto(x, y1)
             up()
 
         elif element == vert:
             up()
-            goto(scale_x, scale_y)
+            goto(x, y1)
             down()
-            goto(scale_x, 2*scale_y/3)
+            goto(x, y2)
             up()
 
         penup()
         goto(0, 0)
 
-    def draw_digit(self, digit):
+    def draw_digit(self, digit, i):
         if digit not in elements:
             return
         penup()
         goto(0, 0)
         pendown()
         for elem in elements[digit]:
-            self.draw_element(elem)
+            self.draw_element(elem, i)
 
     def draw_number(self):
-        for digit in self._digits:
-            self.draw_digit(digit)
+        for i, digit in enumerate(self._digits):
+            self.draw_digit(digit, i)
 
 
-num1 = CisterianNumber(6)
-num1.draw_number()
-mainloop()
+if __name__ == '__main__':
+    num1 = CisterianNumber(1993)
+    num1.draw_number()
+    mainloop()
